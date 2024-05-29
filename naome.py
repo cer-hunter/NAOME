@@ -259,25 +259,21 @@ class Script:
     def read_page(self):
         sentences = len(self.text[self.page])  # number of sentences
         for i in range(sentences):
-            try:
+            self.update_msg(self.text[self.page][self.sen])
+            self.free_tts()
+            dialog = raw_input("Type 1 to enter mistake dialog, 0 to enter free tts "
+                               "default is continue story: ")
+            if dialog == "0":
+                self.free_tts()
                 self.update_msg(self.text[self.page][self.sen])
                 self.free_tts()
-                time.sleep(15)
-                self.sen += 1
-            except KeyboardInterrupt:
-                dialog = raw_input("Type tts to enter free tts, otherwise "
-                                   "default is mistake dialogue: ")
-                if dialog == "tts":
-                    self.free_tts()
-                    self.update_msg(self.text[self.page][self.sen])
-                    self.free_tts()
-                    self.sen += 1
-                else:
-                    self.mistake_made()
-                    self.update_msg(self.text[self.page][self.sen])
-                    self.free_tts()
-                    self.sen += 1
+            elif dialog == "1":
+                self.mistake_made()
+                self.update_msg(self.text[self.page][self.sen])
+                self.free_tts()
+            else:
                 continue
+            self.sen += 1
         self.update_msg("Okay should we continue to the next page, "
                         "or would you like for me to read this page again "
                         "to make sure I don't make any mistakes?")
@@ -306,7 +302,7 @@ class Script:
             self.text[self.page][self.sen] = new_sen
             self.update_msg(new_sen + ", is this correct?")
             self.free_tts()
-            cont = raw_input("Press 1 to continue story or 0 to redo mistake dialog, default is redo dialog: ")
+            cont = raw_input("Press 1 to continue story, or default is redo dialog: ")
             if cont == "1":
                 break
             else:
