@@ -1,4 +1,5 @@
 import naoqi
+import time
 
 
 def no_error():
@@ -238,31 +239,51 @@ class Script:
         self.IP = ip
         self.page = 1
         self.sen = 1
+        self.preset_msg = "None"
+
+    def update_msg(self, msg):
+        self.preset_msg = msg
 
     def free_tts(self):
-        tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
-        tts.say(input())
+        # tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
+        if self.preset_msg == "None":
+            # tts.say(raw_input())
+            # for testing without robot:
+            print raw_input()
+        else:
+            # tts.say(self.preset_msg)
+            # for testing without robot:
+            print self.preset_msg
+            self.preset_msg = "None"
 
     def read_page(self):
-        tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
         sentences = len(self.text[self.page])  # number of sentences
         for i in range(sentences):
             try:
-                tts.say(self.text[self.page][self.sen])
+                self.update_msg(self.text[self.page][self.sen])
+                self.free_tts()
+                time.sleep(15)
                 self.sen += 1
             except KeyboardInterrupt:
-                input("Press Enter to begin Mistake Dialogue")
-                self.mistake_made()
-                tts.say(self.text[self.page][self.sen])
-                self.sen += 1
+                dialog = raw_input("Type tts to enter free tts, otherwise "
+                                   "default is mistake dialogue: ")
+                if dialog == "tts":
+                    self.free_tts()
+                    self.update_msg(self.text[self.page][self.sen])
+                    self.free_tts()
+                    self.sen += 1
+                else:
+                    self.mistake_made()
+                    self.update_msg(self.text[self.page][self.sen])
+                    self.free_tts()
+                    self.sen += 1
                 continue
-        tts.say("Okay should we continue to the next page, "
-                "or would you like for me to read this page again "
-                "to make sure I don't make any mistakes?")
-        decision = input("Input 1 for next page, or 2 for re-reading the page, default is next page")
-        if decision == 1:
-            self.next_page()
-        elif decision == 2:
+        self.update_msg("Okay should we continue to the next page, "
+                        "or would you like for me to read this page again "
+                        "to make sure I don't make any mistakes?")
+        self.free_tts()
+        decision = raw_input("Input 1 to re-read the page, default is next page: ")
+        if decision == "1":
             self.reread_page()
         else:
             self.next_page()
@@ -278,14 +299,17 @@ class Script:
         self.read_page()
 
     def mistake_made(self):
-        tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
-        tts.say("Please tell me my mistake.")
-        new_sen = input()
-        self.text[self.page][self.sen] = new_sen
-        input("Press Enter to continue the story")
-        tts.say("Okay I will continue reading now")
-
-
-
-
-
+        while True:
+            self.update_msg("OK please tell me my mistake.")
+            self.free_tts()
+            new_sen = raw_input()
+            self.text[self.page][self.sen] = new_sen
+            self.update_msg(new_sen + ", is this correct?")
+            self.free_tts()
+            cont = raw_input("Press 1 to continue story or 0 to redo mistake dialog, default is redo dialog: ")
+            if cont == "1":
+                break
+            else:
+                continue
+        self.update_msg("Okay I will continue reading now")
+        self.free_tts()
