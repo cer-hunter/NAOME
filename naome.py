@@ -1,5 +1,4 @@
 import naoqi
-import time
 
 
 def no_error():
@@ -245,44 +244,56 @@ class Script:
         self.preset_msg = msg
 
     def free_tts(self):
-        # tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
+        tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
         if self.preset_msg == "None":
-            # tts.say(raw_input())
+            tts.say(raw_input())
             # for testing without robot:
-            print raw_input()
+            # print raw_input()
         else:
-            # tts.say(self.preset_msg)
+            tts.say(self.preset_msg)
             # for testing without robot:
-            print self.preset_msg
+            # print self.preset_msg
             self.preset_msg = "None"
 
     def read_page(self):
         sentences = len(self.text[self.page])  # number of sentences
         for i in range(sentences):
+            if self.sen == 1:
+                print "---------- Page " + str(self.page) + " ----------"
             self.update_msg(self.text[self.page][self.sen])
             self.free_tts()
-            dialog = raw_input("Type 1 to enter mistake dialog, 0 to enter free tts "
-                               "default is continue story: ")
+            dialog = raw_input("Type 1 to start mistake dialog, 0 to start free tts "
+                               "enter is continue story: ")
             if dialog == "0":
                 self.free_tts()
                 self.update_msg(self.text[self.page][self.sen])
                 self.free_tts()
+                self.sen += 1
             elif dialog == "1":
                 self.mistake_made()
                 self.update_msg(self.text[self.page][self.sen])
                 self.free_tts()
+                self.sen += 1
             else:
-                continue
-            self.sen += 1
-        self.update_msg("Okay should we continue to the next page, "
-                        "or would you like for me to read this page again "
-                        "to make sure I don't make any mistakes?")
-        self.free_tts()
-        decision = raw_input("Input 1 to re-read the page, default is next page: ")
-        if decision == "1":
-            self.reread_page()
-        else:
-            self.next_page()
+                self.sen += 1
+        if self.page != 12:
+            self.update_msg("Okay should we continue to the next page, "
+                            "or would you like for me to read this page again?")
+            self.free_tts()
+            decision = raw_input("Input 1 to re-read the page, default is next page: ")
+            if decision == "1":
+                self.reread_page()
+            else:
+                self.next_page()
+        elif self.page == 12:
+            self.update_msg("Okay would you like me to read this page again or "
+                            "are we done the story?")
+            self.free_tts()
+            decision = raw_input("Input 1 to re-read the page, enter is end session: ")
+            if decision == "1":
+                self.reread_page()
+            else:
+                self.next_page()
 
     def next_page(self):
         self.sen = 1
@@ -302,10 +313,10 @@ class Script:
             self.text[self.page][self.sen] = new_sen
             self.update_msg(new_sen + ", is this correct?")
             self.free_tts()
-            cont = raw_input("Press 1 to continue story, or default is redo dialog: ")
+            cont = raw_input("Press 1 to redo dialogue, or enter is continue story: ")
             if cont == "1":
-                break
-            else:
                 continue
+            else:
+                break
         self.update_msg("Okay I will continue reading now")
         self.free_tts()

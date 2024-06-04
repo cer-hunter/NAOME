@@ -1,6 +1,6 @@
 from naome import *
 
-ipaddress = "1.1.1.1"
+ipaddress = "192.168.1.139"
 
 
 def main():
@@ -17,6 +17,8 @@ def main():
 
     # Intro Loop
     while True:
+        nao.update_msg("Hi my name is Sami, can you help me reed this story?")
+        nao.free_tts()
         intro = raw_input("Type start to begin or press enter to use free tts: ")
         if intro == "start":
             nao.read_page()
