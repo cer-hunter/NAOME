@@ -240,6 +240,10 @@ class Script:
         self.sen = 1
         self.preset_msg = "None"
 
+    def al_off(self):
+        al = naoqi.ALProxy("ALAutonomousLife", self.IP, 9559)
+        al.setState("disabled")
+
     def update_msg(self, msg):
         self.preset_msg = msg
 
@@ -254,6 +258,21 @@ class Script:
             # for testing without robot:
             # print self.preset_msg
             self.preset_msg = "None"
+
+    def move_head(self, pos):
+        mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
+        if pos == "child":
+            names = "HeadYaw"
+            angle_lists = 1.0
+            times = 1.0
+            is_absolute = True
+            mov.angleInterpolation(names, angle_lists, times, is_absolute)
+        elif pos == "book":
+            names = "HeadYaw"
+            angle_lists = 0
+            times = 1.0
+            is_absolute = True
+            mov.angleInterpolation(names, angle_lists, times, is_absolute)
 
     def read_page(self):
         sentences = len(self.text[self.page])  # number of sentences

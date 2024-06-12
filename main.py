@@ -15,6 +15,9 @@ def main():
     else:
         return
 
+    # turn off artificial life
+    nao.al_off()
+
     # Intro Loop
     while True:
         nao.update_msg("Hi my name is Sami, can you help me reed this story?")
