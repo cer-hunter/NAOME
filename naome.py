@@ -1,4 +1,5 @@
 import naoqi
+import time
 
 
 def no_error():
@@ -262,21 +263,32 @@ class Script:
     def move_head(self, pos):
         mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
         if pos == "child":
-            names = "HeadYaw"
-            angle_lists = 1.0
-            times = 1.0
-            is_absolute = True
-            mov.angleInterpolation(names, angle_lists, times, is_absolute)
+            mov.setStiffnesses("Head", 1.0)
+            names = ["HeadYaw", "HeadPitch"]
+            angles = [0.75, 0]
+            max_speed = 0.2
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
+            mov.setStiffnesses("Head", 0.0)
         elif pos == "book":
-            names = "HeadYaw"
-            angle_lists = 0
-            times = 1.0
-            is_absolute = True
-            mov.angleInterpolation(names, angle_lists, times, is_absolute)
+            mov.setStiffnesses("Head", 1.0)
+            names = ["HeadYaw", "HeadPitch"]
+            angles = [0, 0]
+            max_speed = 0.2
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
+            mov.setStiffnesses("Head", 0.0)
+
+    def posture(self, pos):
+        mov = naoqi.ALProxy('ALRobotPosture', self.IP, 9559)
+        if pos == "sit":
+            mov.goToPosture("Sit", 1.0)
+        elif pos == "stand":
+            mov.goToPosture("Stand", 1.0)
 
     def read_page(self):
-        sentences = len(self.text[self.page])  # number of sentences
         if self.page <= 12:
+            sentences = len(self.text[self.page])  # number of sentences
             for i in range(sentences):
                 if self.sen == 1:
                     print "---------- Page " + str(self.page) + " ----------"
@@ -285,11 +297,13 @@ class Script:
                 dialog = raw_input("Type 1 to start mistake dialog, 0 to start free tts "
                                    "enter is continue story: ")
                 if dialog == "0":
+                    self.move_head("child")
                     self.free_tts()
                     self.update_msg(self.text[self.page][self.sen])
                     self.free_tts()
                     self.sen += 1
                 elif dialog == "1":
+                    self.move_head("child")
                     self.mistake_made()
                     self.update_msg(self.text[self.page][self.sen])
                     self.free_tts()
@@ -297,15 +311,18 @@ class Script:
                 else:
                     self.sen += 1
         if self.page < 12:
+            self.move_head("child")
             self.update_msg("Okay should we continue to the next page, "
                             "or would you like for me to read this page again?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, 0 to end early, default is next page: ")
             if decision == "1":
+                self.move_head("book")
                 self.reread_page()
             elif decision == "0":
                 self.end_early()
             else:
+                self.move_head("book")
                 self.next_page()
         elif self.page == 12:
             self.update_msg("Okay would you like me to read this page again or "
@@ -313,8 +330,10 @@ class Script:
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, enter is end session: ")
             if decision == "1":
+                self.move_head("book")
                 self.reread_page()
             else:
+                self.move_head("book")
                 self.next_page()
         else:
             self.update_msg("Okay we are finishing the story early")
@@ -338,15 +357,18 @@ class Script:
     def mistake_made(self):
         while True:
             self.update_msg("OK please tell me my mistake.")
+            self.move_head("book")
             self.free_tts()
             new_sen = raw_input()
             self.text[self.page][self.sen] = new_sen
             self.update_msg(new_sen + ", is this correct?")
             self.free_tts()
+            self.move_head("child")
             cont = raw_input("Press 1 to redo dialogue, or enter is continue story: ")
             if cont == "1":
                 continue
             else:
                 break
+        self.move_head("book")
         self.update_msg("Okay I will continue reading now")
         self.free_tts()
