@@ -22,6 +22,11 @@ def main():
     while True:
         nao.update_msg("Hi my name is Sami, can you help me reed this story?")
         nao.free_tts()
+        nao.move_head("child")
+        nao.free_tts()
+        nao.move_head("book")
+        nao.free_tts()
+        nao.move_head("child")
         intro = raw_input("Type start to begin or press enter to use free tts: ")
         if intro == "start":
             nao.read_page()

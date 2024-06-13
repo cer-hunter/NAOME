@@ -276,32 +276,35 @@ class Script:
 
     def read_page(self):
         sentences = len(self.text[self.page])  # number of sentences
-        for i in range(sentences):
-            if self.sen == 1:
-                print "---------- Page " + str(self.page) + " ----------"
-            self.update_msg(self.text[self.page][self.sen])
-            self.free_tts()
-            dialog = raw_input("Type 1 to start mistake dialog, 0 to start free tts "
-                               "enter is continue story: ")
-            if dialog == "0":
-                self.free_tts()
+        if self.page <= 12:
+            for i in range(sentences):
+                if self.sen == 1:
+                    print "---------- Page " + str(self.page) + " ----------"
                 self.update_msg(self.text[self.page][self.sen])
                 self.free_tts()
-                self.sen += 1
-            elif dialog == "1":
-                self.mistake_made()
-                self.update_msg(self.text[self.page][self.sen])
-                self.free_tts()
-                self.sen += 1
-            else:
-                self.sen += 1
-        if self.page != 12:
+                dialog = raw_input("Type 1 to start mistake dialog, 0 to start free tts "
+                                   "enter is continue story: ")
+                if dialog == "0":
+                    self.free_tts()
+                    self.update_msg(self.text[self.page][self.sen])
+                    self.free_tts()
+                    self.sen += 1
+                elif dialog == "1":
+                    self.mistake_made()
+                    self.update_msg(self.text[self.page][self.sen])
+                    self.free_tts()
+                    self.sen += 1
+                else:
+                    self.sen += 1
+        if self.page < 12:
             self.update_msg("Okay should we continue to the next page, "
                             "or would you like for me to read this page again?")
             self.free_tts()
-            decision = raw_input("Input 1 to re-read the page, default is next page: ")
+            decision = raw_input("Input 1 to re-read the page, 0 to end early, default is next page: ")
             if decision == "1":
                 self.reread_page()
+            elif decision == "0":
+                self.end_early()
             else:
                 self.next_page()
         elif self.page == 12:
@@ -313,12 +316,20 @@ class Script:
                 self.reread_page()
             else:
                 self.next_page()
+        else:
+            self.update_msg("Okay we are finishing the story early")
+            self.free_tts()
 
     def next_page(self):
         self.sen = 1
         if self.page < 12:
             self.page = self.page + 1
             self.read_page()
+
+    def end_early(self):
+        self.sen = 1
+        self.page = 13
+        self.read_page()
 
     def reread_page(self):
         self.sen = 1
