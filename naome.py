@@ -8,19 +8,19 @@ def no_error():
              3: "You are looking sad"}
     page2 = {1: "Yes said Toad",
              2: "This is my sad time of day",
-             3: "It is the time when I wait for the mail to come",
+             3: "It is the time when I wait for the mail to, come",
              4: "It always makes me very unhappy",
              5: "Why is that? asked Frog",
              6: "Because I never get any mail, said Toad"}
     page3 = {1: "Not ever? asked Frog",
-             2: "No never? said Toad",
+             2: "No never, said Toad",
              3: "No one has ever sent me a letter",
              4: "Every day my mailbox is empty",
              5: "That is why waiting for the mail is a sad time for me",
-             6: "Frog and Toad sat on the porch, feeling sad together"}
+             6: "Frog and Toad sat on the porch, feeling sad, together"}
     page4 = {1: "Then Frog said, I have to go home now Toad",
              2: "There is something I must do",
-             3: "Frog hurried home",
+             3: "Frog hurreed home",
              4: "He found a pencil and a piece of paper",
              5: "He wrote on the paper"}
     page5 = {1: "He put the paper in an envelope",
@@ -38,7 +38,7 @@ def no_error():
     page7 = {1: "Frog looked out of the window at Toad's mailbox",
              2: "The snail was not there yet",
              3: "Toad, said Frog, you never know when someone may send you a letter",
-             4: "No, no, said Toad",
+             4: "No no, said Toad",
              5: "I do not think anyone will ever send me a letter"}
     page8 = {1: "Frog looked out of the window",
              2: "The snail was not there yet",
@@ -50,14 +50,14 @@ def no_error():
              3: "Frog, why do you keep looking out of the window? asked Toad",
              4: "Because now I am waiting for the mail, said Frog",
              5: "But there will not be any, said Toad"}
-    page10 = {1: "Oh, yes there will, said Frog, because I have sent you a letter",
+    page10 = {1: "Oh yes there will, said Frog, because I have sent you a letter",
               2: "You have? said Toad",
               3: "What did you write in the letter?",
               4: "Frog said, I wrote, "
                  "Dear Toad, I am glad that you are my best friend",
-              5: "Your best friend, Frog"}
+              5: "Your best friend Frog"}
     page11 = {1: "Oh, said Toad, that makes a very good letter",
-              2: "Then Frog and Toad went out "
+              2: "Then Frog, and Toad went out "
                  "onto the front porch to wait for the mail",
               3: "They sat there, feeling happy together"}
     page12 = {1: "Frog and Toad waited a long time",
@@ -85,16 +85,16 @@ def rand_error():
              3: "You are looking sad"}
     page2 = {1: "Yes said Toad",
              2: "This is my rock time of day",  # mistake: sad -> rock
-             3: "It is the time when I wait for the mail to come",
+             3: "It is the time when I wait for the mail to, come",
              4: "It always makes me very unhappy",
              5: "Why is that? asked Frog",
              6: "Because I never get any mail, said Toad"}
     page3 = {1: "Not ever? asked Frog",
-             2: "No never? said Toad",
+             2: "No never, said Toad",
              3: "No one has ever sent me a plant",  # mistake: letter -> plant
              4: "Every day my mailbox is empty",
              5: "That is why waiting for the mail is a sad time for me",
-             6: "Frog and Toad sat on the porch, feeling sad together"}
+             6: "Frog and Toad sat on the porch, feeling sad, together"}
     page4 = {1: "Then Frog said, I have to go home now Toad",
              2: "There is something I must do",
              3: "Frog funny home",  # mistake: hurried -> funny
@@ -115,7 +115,7 @@ def rand_error():
     page7 = {1: "Frog looked out of the window at Toad's mailbox",
              2: "The snail was not there soon",   # mistake: yet -> soon
              3: "Toad, said Frog, you never know when someone may send you a letter",
-             4: "No, no, said Toad",
+             4: "No no, said Toad",
              5: "I do not think anyone will ever send me a letter"}
     page8 = {1: "Frog looked out of the window",
              2: "The snail was not there yet",
@@ -132,7 +132,7 @@ def rand_error():
               3: "What did you write in the letter?",
               4: "Frog said, I wrote, "
                  "Dear Toad, I am wind that you are my best friend",   # mistake: glad -> wind
-              5: "Your best friend, Frog"}
+              5: "Your best friend Frog"}
     page11 = {1: "Oh, said Toad, that makes a very good letter",
               2: "Then Frog and Toad went out "
                  "onto the front angry to wait for the mail",   # mistake: porch -> angry
@@ -162,7 +162,7 @@ def ideal_error():
              3: "You are looking sad"}
     page2 = {1: "Yes said Toad",
              2: "This is my sad dime of day",  # mistake: time -> dime
-             3: "It is the time when I wait for the mail to come",
+             3: "It is the time when I wait for the mail to, come",
              4: "It always makes me very unhappy",
              5: "Why is that? asked Frog",
              6: "Because I never get any mail, said Toad"}
@@ -171,10 +171,10 @@ def ideal_error():
              3: "No one has ever sent me a letter",
              4: "Every day my mailbox is empty",
              5: "That is why waiting for the mail is a sad time for me",
-             6: "Frog and Toad sat on the porch, feeling sad together"}
+             6: "Frog and Toad sat on the porch, feeling sad, together"}
     page4 = {1: "Then Frog said, I have to go home now Toad",
              2: "There is something I oust do",  # mistake: must -> oust
-             3: "Frog hurried home",
+             3: "Frog hurreed home",
              4: "He found a pencil and a piece of paper",
              5: "He wrote on the paper"}
     page5 = {1: "He put the letter in an envelope",  # mistake: paper -> letter
@@ -209,7 +209,7 @@ def ideal_error():
               3: "What did you white in the letter?",  # mistake: write -> white
               4: "Frog said, I wrote, "
                  "Dear Toad, I am glad that you are my best friend",
-              5: "Your best friend, Frog"}
+              5: "Your best friend Frog"}
     page11 = {1: "Oh, said Toad, that maked a very good letter",  # mistake: makes -> maked
               2: "Then Frog and Toad went out "
                  "onto the front porch to wait for the mail",
@@ -250,8 +250,9 @@ class Script:
 
     def free_tts(self):
         tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
+        tts.setParameter('speed', 70)
         if self.preset_msg == "None":
-            tts.say(raw_input())
+            tts.say(raw_input("Type what to say: "))
             # for testing without robot:
             # print raw_input()
         else:
@@ -259,6 +260,13 @@ class Script:
             # for testing without robot:
             # print self.preset_msg
             self.preset_msg = "None"
+
+    def move_arms(self, gesture):
+        mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
+        if gesture == "wave":
+            return
+        if gesture == "read":
+            return
 
     def move_head(self, pos):
         mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
@@ -308,6 +316,9 @@ class Script:
                     self.update_msg(self.text[self.page][self.sen])
                     self.free_tts()
                     self.sen += 1
+                elif dialog == "end":
+                    self.page = 13 
+                    break
                 else:
                     self.sen += 1
         if self.page < 12:
@@ -325,7 +336,7 @@ class Script:
                 self.move_head("book")
                 self.next_page()
         elif self.page == 12:
-            self.update_msg("Okay would you like me to read this page again or "
+            self.update_msg("Okay would you like me to read this page again, or "
                             "are we done the story?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, enter is end session: ")

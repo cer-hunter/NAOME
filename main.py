@@ -25,13 +25,19 @@ def main():
         # if pos == "break":
            # break
 
+    # Setup loop
+    nao.posture("sit")
+    nao.move_head("book")
+    while True:
+        raw_input("Press enter to start: ")
+        break
     # Intro Loop
     nao.posture("stand")
     nao.move_head("child")
     nao.update_msg("Hi my name is Sami, can you help me reed this story?")
     nao.free_tts()
-    nao.update_msg("If I make a mistake please let me know right away! Also, "
-                   "I will ask you if you want me to re-read any page if you're not sure."
+    nao.update_msg("If I make a mistake please let me know! Also, "
+                   "I will ask you if you want me to re-read any page if you're not sure..."
                    "Sit down beside me and we can start reading.")
     nao.free_tts()
     while True:
@@ -51,8 +57,8 @@ def main():
     nao.posture("stand")
     nao.move_head("child")
     raw_input("Press Enter to start outro dialog")
-    nao.update_msg("Thank you for reading with me today, I learned a lot. Please go"
-                   "with my friend to get your toy. Bye Bye!")
+    nao.update_msg("Thank you for reading with me today, I learned a lot. Please go with"
+                   "Hunter to get your toy. Bye Bye!")
     nao.free_tts()
     while True:
         outro = raw_input("Type end to finish dialog or press enter to use free tts: ")
