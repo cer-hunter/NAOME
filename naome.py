@@ -240,6 +240,8 @@ class Script:
         self.page = 1
         self.sen = 1
         self.preset_msg = "None"
+        self.arm_angles = [0, 0, 0, 0, 0, 0,
+                           0, 0, 0, 0, 0, 0]
 
     def al_off(self):
         al = naoqi.ALProxy("ALAutonomousLife", self.IP, 9559)
@@ -250,9 +252,14 @@ class Script:
 
     def free_tts(self):
         tts = naoqi.ALProxy('ALTextToSpeech', self.IP, 9559)
-        tts.setParameter('speed', 70)
+        tts.setParameter('speed', 100)
         if self.preset_msg == "None":
-            tts.say(raw_input("Type what to say: "))
+            while True:
+                msg = raw_input("Type what to say: ")
+                if msg == "break":
+                    break
+                else:
+                    tts.say(msg)
             # for testing without robot:
             # print raw_input()
         else:
@@ -264,24 +271,29 @@ class Script:
     def move_arms(self, gesture):
         mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
         if gesture == "wave":
-            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll','RWristYaw', 'RHand']
-            angles = [0.7, -0.3, 1.5, 0.5, 1.7, 0]
+            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand']
+            angles = [-1.5, -0.3, 1.5, 0.1, 1, 1]
             max_speed = 0.2
-            mov.setAngles(names, angles, max_speed)
-            time.sleep(1)
+            for i in range(len(angles)):
+                mov.setAngles(names, angles, max_speed)
+                time.sleep(1)
+                if angles[3] == 0.1:
+                    angles[3] = 1.4
+                elif angles[3] == 1.4:
+                    angles[3] = 0.1
+                i += 1
         if gesture == "read":
             names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand',
                      'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
-            angles = [0.7, -0.3, 1.5, 0.5, 1.7, 0,
-                      0.7, 0.3, -1.5, -0.5, -1.7, 0]
+            angles = [0.7, -0.3, 1.5, 0.5, 1.7, 1,
+                      0.7, 0.3, -1.5, -0.5, -1.7, 1]
             max_speed = 0.2
             mov.setAngles(names, angles, max_speed)
             time.sleep(1)
         if gesture == "reset":
             names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand',
                      'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
-            angles = [0, 0, 0, 0, 0, 0,
-                      0, 0, 0, 0, 0, 0]
+            angles = self.arm_angles
             max_speed = 0.2
             mov.setAngles(names, angles, max_speed)
             time.sleep(1)
@@ -307,8 +319,12 @@ class Script:
 
     def posture(self, pos):
         mov = naoqi.ALProxy('ALRobotPosture', self.IP, 9559)
+        arms = naoqi.ALProxy('ALMotion', self.IP, 9559)
         if pos == "sit":
             mov.goToPosture("Sit", 1.0)
+            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand',
+                     'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
+            self.arm_angles = arms.getAngles(names, False)
         elif pos == "stand":
             mov.goToPosture("Stand", 1.0)
 
@@ -325,6 +341,7 @@ class Script:
                 if dialog == "0":
                     self.move_head("child")
                     self.free_tts()
+                    self.move_head("book")
                     self.update_msg(self.text[self.page][self.sen])
                     self.free_tts()
                     self.sen += 1
