@@ -264,9 +264,27 @@ class Script:
     def move_arms(self, gesture):
         mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
         if gesture == "wave":
-            return
+            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll','RWristYaw', 'RHand']
+            angles = [0.7, -0.3, 1.5, 0.5, 1.7, 0]
+            max_speed = 0.2
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
         if gesture == "read":
-            return
+            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand',
+                     'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
+            angles = [0.7, -0.3, 1.5, 0.5, 1.7, 0,
+                      0.7, 0.3, -1.5, -0.5, -1.7, 0]
+            max_speed = 0.2
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
+        if gesture == "reset":
+            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand',
+                     'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
+            angles = [0, 0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0, 0]
+            max_speed = 0.2
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
 
     def move_head(self, pos):
         mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
