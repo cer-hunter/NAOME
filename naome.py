@@ -3,9 +3,9 @@ import time
 
 
 def no_error():
-    page1 = {1: "Toad was sitting on his front porch",
-             2: "Frog came along and said, what is the matter Toad?",
-             3: "You are looking sad"}
+    page1 = {1: "Toad, was sitting, on his, front porch",
+             2: "Frog, came along, and said, what is the, matter Toad?",
+             3: "You are, looking sad"}
     page2 = {1: "Yes said Toad",
              2: "This is my sad time of day",
              3: "It is the time when I wait for the mail to, come",
@@ -80,9 +80,9 @@ def no_error():
 
 
 def rand_error():
-    page1 = {1: "Toad was sitting on his front porch",
-             2: "Frog came along and said, what is the grape Toad?",  # mistake: matter -> grape
-             3: "You are looking sad"}
+    page1 = {1: "Toad, was sitting, on his, front porch",
+             2: "Frog, came along, and said, what is the, grape Toad?",  # mistake: matter -> grape
+             3: "You are, looking sad"}
     page2 = {1: "Yes said Toad",
              2: "This is my rock time of day",  # mistake: sad -> rock
              3: "It is the time when I wait for the mail to, come",
@@ -157,9 +157,9 @@ def rand_error():
 
 
 def ideal_error():
-    page1 = {1: "Toad was sitting on his front porch",
-             2: "Frog come along and said, what is the matter Toad?",  # mistake: came -> come
-             3: "You are looking sad"}
+    page1 = {1: "Toad, was sitting, on his, front porch",
+             2: "Frog, come along, and said, what is the, matter Toad?",  # mistake: came -> come
+             3: "You are, looking sad"}
     page2 = {1: "Yes said Toad",
              2: "This is my sad dime of day",  # mistake: time -> dime
              3: "It is the time when I wait for the mail to, come",
@@ -272,7 +272,7 @@ class Script:
         mov = naoqi.ALProxy('ALMotion', self.IP, 9559)
         if gesture == "wave":
             names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand']
-            angles = [-1.5, -0.3, 1.5, 0.1, 1, 1]
+            angles = [-1.5, -0.3, 0, 0.1, 1, 1]
             max_speed = 0.2
             for i in range(len(angles)):
                 mov.setAngles(names, angles, max_speed)
@@ -319,14 +319,16 @@ class Script:
 
     def posture(self, pos):
         mov = naoqi.ALProxy('ALRobotPosture', self.IP, 9559)
-        arms = naoqi.ALProxy('ALMotion', self.IP, 9559)
+        body = naoqi.ALProxy('ALMotion', self.IP, 9559)
         if pos == "sit":
             mov.goToPosture("Sit", 1.0)
             names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand',
                      'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
-            self.arm_angles = arms.getAngles(names, False)
+            self.arm_angles = body.getAngles(names, False)
         elif pos == "stand":
             mov.goToPosture("Stand", 1.0)
+        elif pos == "rest":
+            body.rest()
 
     def read_page(self):
         if self.page <= 12:
@@ -334,8 +336,12 @@ class Script:
             for i in range(sentences):
                 if self.sen == 1:
                     print "---------- Page " + str(self.page) + " ----------"
+                if self.sen % 2 == 0:
+                    self.move_arms("read")
                 self.update_msg(self.text[self.page][self.sen])
                 self.free_tts()
+                if self.sen % 2 == 0:
+                    self.move_arms("reset")
                 dialog = raw_input("Type 1 to start mistake dialog, 0 to start free tts "
                                    "enter is continue story: ")
                 if dialog == "0":
@@ -358,8 +364,8 @@ class Script:
                     self.sen += 1
         if self.page < 12:
             self.move_head("child")
-            self.update_msg("Okay should we continue to the next page, "
-                            "or would you like for me to read this page again?")
+            self.update_msg("Okay, should we, continue to, the next page, "
+                            "or, would you, like for me, to read, this page again?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, 0 to end early, default is next page: ")
             if decision == "1":
@@ -371,8 +377,8 @@ class Script:
                 self.move_head("book")
                 self.next_page()
         elif self.page == 12:
-            self.update_msg("Okay would you like me to read this page again, or "
-                            "are we done the story?")
+            self.update_msg("Okay, would you, like me, to read, this page again, or, "
+                            "are we, done the story?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, enter is end session: ")
             if decision == "1":
@@ -382,7 +388,7 @@ class Script:
                 self.move_head("book")
                 self.next_page()
         else:
-            self.update_msg("Okay we are finishing the story early")
+            self.update_msg("Okay, we are, finishing the, story early")
             self.free_tts()
 
     def next_page(self):
@@ -402,11 +408,11 @@ class Script:
 
     def mistake_made(self):
         while True:
-            self.update_msg("OK please tell me my mistake.")
-            self.move_head("book")
+            self.update_msg("OK, please tell me, my mistake.")
             self.free_tts()
             new_sen = raw_input()
             self.text[self.page][self.sen] = new_sen
+            self.move_head("book")
             self.update_msg(new_sen + ", is this correct?")
             self.free_tts()
             self.move_head("child")
@@ -416,5 +422,5 @@ class Script:
             else:
                 break
         self.move_head("book")
-        self.update_msg("Okay I will continue reading now")
+        self.update_msg("Okay, I will, continue reading, now")
         self.free_tts()
