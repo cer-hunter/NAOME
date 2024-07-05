@@ -255,9 +255,15 @@ class Script:
         tts.setParameter('speed', 100)
         if self.preset_msg == "None":
             while True:
-                msg = raw_input("Type what to say: ")
-                if msg == "break":
+                msg = raw_input("Type what to say, or quick select: ")
+                if msg == "0":
                     break
+                elif msg == "1":
+                    tts.say("We can, talk later. Let's focus, on reading, now.")
+                elif msg == "2":
+                    tts.say("Let's, continue, reading.")
+                elif msg == "3":
+                    tts.say("We need to read the book. Let's talk later.")
                 else:
                     tts.say(msg)
             # for testing without robot:
