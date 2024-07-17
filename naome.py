@@ -1,5 +1,6 @@
 import naoqi
 import time
+import random
 
 
 def no_error():
@@ -198,7 +199,7 @@ def ideal_error():
              2: "The snail was not there yet",
              3: "But Toad, said Frog, something may send you a letter today",  # mistake: someone -> something
              4: "Don't be silly, said Toad",
-             5: "No one, has ever, sent me, a letter, before, and, no one, will send me, a letter, today"}
+             5: "No one has ever sent me a letter before, and no one will send me a letter today"}
     page9 = {1: "Frog looked out of the window",
              2: "The snail was still not there",
              3: "Frog, why do you keep looking out of the window? asked Toad",
@@ -255,6 +256,7 @@ class Script:
         tts.setParameter('speed', 100)
         if self.preset_msg == "None":
             while True:
+                move = random.choice(["read", "right", "left"])
                 msg = raw_input("Type what to say, or quick select: ")
                 if msg == "0":
                     break
@@ -265,9 +267,17 @@ class Script:
                 elif msg == "3":
                     tts.say("We need to read the book. Let's talk later.")
                 else:
+                    self.move_arms(move)
                     tts.say(msg)
-            # for testing without robot:
-            # print raw_input()
+                    self.move_arms("reset")
+                    # for testing without robot:
+                    # print raw_input()
+        elif self.preset_msg == "Hi":
+            tts.post.say("Hi my name is Sami!")
+            self.preset_msg = "None"
+        elif self.preset_msg == "Bye":
+            tts.post.say("Bye Bye!")
+            self.preset_msg = "None"
         else:
             tts.say(self.preset_msg)
             # for testing without robot:
@@ -279,7 +289,7 @@ class Script:
         if gesture == "wave":
             names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand']
             angles = [-1.5, -0.3, 0, 0.1, 1, 1]
-            max_speed = 0.2
+            max_speed = 0.6
             for i in range(len(angles)):
                 mov.setAngles(names, angles, max_speed)
                 time.sleep(1)
@@ -293,7 +303,19 @@ class Script:
                      'LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
             angles = [0.7, -0.3, 1.5, 0.5, 1.7, 1,
                       0.7, 0.3, -1.5, -0.5, -1.7, 1]
-            max_speed = 0.2
+            max_speed = 0.4
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
+        if gesture == "right":
+            names = ['RShoulderPitch', 'RShoulderRoll', 'RElbowYaw', 'RElbowRoll', 'RWristYaw', 'RHand']
+            angles = [0.7, -0.3, 1.5, 0.5, 1.7, 0]
+            max_speed = 0.4
+            mov.setAngles(names, angles, max_speed)
+            time.sleep(1)
+        if gesture == "left":
+            names = ['LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
+            angles = [0.7, 0.3, -1.5, -0.5, -1.7, 0]
+            max_speed = 0.4
             mov.setAngles(names, angles, max_speed)
             time.sleep(1)
         if gesture == "reset":
@@ -309,7 +331,7 @@ class Script:
         if pos == "child":
             mov.setStiffnesses("Head", 1.0)
             names = ["HeadYaw", "HeadPitch"]
-            angles = [0.75, 0]
+            angles = [-0.75, 0]
             max_speed = 0.2
             mov.setAngles(names, angles, max_speed)
             time.sleep(1)
@@ -342,12 +364,11 @@ class Script:
             for i in range(sentences):
                 if self.sen == 1:
                     print "---------- Page " + str(self.page) + " ----------"
-                if self.sen % 2 == 0:
-                    self.move_arms("read")
                 self.update_msg(self.text[self.page][self.sen])
+                move = random.choice(["read", "right", "left"])
+                self.move_arms(move)
                 self.free_tts()
-                if self.sen % 2 == 0:
-                    self.move_arms("reset")
+                self.move_arms("reset")
                 dialog = raw_input("Type 1 to start mistake dialog, 0 to start free tts, end to end early, "
                                    "enter is continue story: ")
                 if dialog == "0":
@@ -374,11 +395,11 @@ class Script:
             self.update_msg("Okay, should we continue to the next page, "
                             "or, would you like for me to read this page again?")
             self.free_tts()
-            decision = raw_input("Input 1 to re-read the page, 0 to end early, default is next page: ")
+            decision = raw_input("Input 1 to re-read the page, end to end early, default is next page: ")
             if decision == "1":
                 self.move_head("book")
                 self.reread_page()
-            elif decision == "0":
+            elif decision == "end":
                 self.end_early()
             else:
                 self.move_head("book")
@@ -420,7 +441,7 @@ class Script:
             new_sen = raw_input()
             self.text[self.page][self.sen] = new_sen
             self.move_head("book")
-            self.update_msg(new_sen + "... Is this correct?")
+            self.update_msg(new_sen + ",,, Is this correct?")
             self.free_tts()
             self.move_head("child")
             cont = raw_input("Press 1 to redo dialogue, or enter is continue story: ")
