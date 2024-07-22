@@ -392,8 +392,8 @@ class Script:
                     self.sen += 1
         if self.page < 12:
             self.move_head("child")
-            self.update_msg("Okay, should we continue to the next page, "
-                            "or, would you like for me to read this page again?")
+            self.update_msg("Okay, if I made a mistake we can reed this page again,"
+                            " or, should we continue to the next page?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, end to end early, default is next page: ")
             if decision == "1":
@@ -405,7 +405,8 @@ class Script:
                 self.move_head("book")
                 self.next_page()
         elif self.page == 12:
-            self.update_msg("Okay, would you like me to read this page again, or, "
+            self.move_head("child")
+            self.update_msg("Okay, if I made a a mistake we can reed this page again, or, "
                             "are we done the story?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, enter is end session: ")

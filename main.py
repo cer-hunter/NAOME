@@ -33,15 +33,10 @@ def main():
     nao.posture("rest")
     prog = raw_input("0 for demo, 1 for study: ")
 
+    # FREE TTS MODE
     if prog == "0":
-        nao.update_msg("Hi")
-        raw_input("Enter to continue")
         nao.posture("sit")
-        nao.free_tts()
-        nao.move_arms("wave")
-        nao.move_arms("reset")
         nao.posture("rest")
-        raw_input("Enter to continue")
         while True:
             demo = raw_input("Enter wave to wave, end to end, enter to tts: ")
             if demo == "wave":
@@ -56,6 +51,7 @@ def main():
                 nao.free_tts()
                 nao.move_arms("rest")
 
+    # RESEARCH STUDY MODE
     elif prog == "1":
         while True:
             raw_input("Press enter to start: ")
@@ -70,7 +66,10 @@ def main():
         nao.posture("stand")
         nao.move_head("child")
         raw_input("Enter to continue")
-        nao.update_msg("Can you help me reed this story? If I make a mistake, please let me know!")
+        nao.update_msg("Can you help me reed this story?")
+        nao.free_tts()
+        raw_input("Enter to continue")
+        nao.update_msg("If I make a mistake, please let me know!")
         nao.free_tts()
         raw_input("Enter to continue")
         nao.update_msg("Also, I will ask you, if you want me to ree-reed any page, if you're not sure...")
