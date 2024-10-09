@@ -174,7 +174,7 @@ def ideal_error():
              5: "That is why waiting for the mail is a sad time for me",
              6: "Frog and Toad sat on the porch, feeling sad together"}
     page4 = {1: "Then Frog said, I have to go home now Toad",
-             2: "There is something that I oust do",  # mistake: must -> oust
+             2: "There is something that I just do",  # mistake: must -> just
              3: "Frog hurreed home",
              4: "He found a pencil and a piece of paper",
              5: "He wrote on the paper"}
