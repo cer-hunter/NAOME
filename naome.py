@@ -106,7 +106,7 @@ def rand_error():
              3: "Frog ran out of his house",
              4: "He saw a snail that he knew",
              5: "Snail, said Frog, please take this letter, "
-                "to Toad's house and put it in his robot",  # mistake: mailbox -> robot
+                "to Toad's house and put it in his elephant",  # mistake: mailbox -> elephant
              6: "Sure, said, the snail. Right away"}
     page6 = {1: "Then Frog ran back to Toad's house",
              2: "Toad was in bed, taking a phone.",   # mistake: nap -> phone
@@ -114,7 +114,7 @@ def rand_error():
                 "I think you should get up, and wait for the mail some more",
              4: "No, said Toad, I am tired of waiting for the mail"}
     page7 = {1: "Frog looked out of the window at Toad's mailbox",
-             2: "The snail was not there soon",   # mistake: yet -> soon
+             2: "The snail was not there hand",   # mistake: yet -> hand
              3: "Toad, said Frog, you never know when someone may \\rspd=80\\ send \\rspd=100\\ you a letter",
              4: "No, no, said Toad",
              5: "I do not think anyone, will ever send me a letter"}
@@ -162,7 +162,7 @@ def ideal_error():
              2: "Frog come along, and said what is the matter Toad?",  # mistake: came -> come
              3: "You are looking sad"}
     page2 = {1: "Yes, said Toad",
-             2: "This is my sad dime of day",  # mistake: time -> dime
+             2: "This is my sad rhyme of day",  # mistake: time -> rhyme
              3: "It is the time when I wait for the mail to, come",
              4: "It always makes me very unhappy",
              5: "Why is that? asked Frog",
@@ -207,11 +207,11 @@ def ideal_error():
              5: "But there will not be many, said Toad"}  # mistake: any -> many
     page10 = {1: "Oh, yes there will, said Frog, because \\rspd=80\\ I have sent you a letter",
               2: "You have? said Toad",
-              3: "What did you white in the letter?",  # mistake: write -> white
+              3: "What did you written in the letter?",  # mistake: write -> written
               4: "Frog said, I wrote, "
                  "Dear Toad, I am glad that you are my best friend",
               5: "Your best friend, Frog"}
-    page11 = {1: "Oh, said Toad, that maked a very good letter",  # mistake: makes -> maked
+    page11 = {1: "Oh, said Toad, that shakes a very good letter",  # mistake: makes -> shakes
               2: "Then, Frog and Toad went out "
                  "onto the front porch to wait for the mail",
               3: "They sat there, feeling happy together"}
@@ -392,9 +392,7 @@ class Script:
                     self.sen += 1
         if self.page < 12:
             self.move_head("child")
-            self.update_msg("Okay, if I made a mistake we can reed this page again, "
-                            "and you can tell me where my mistake was,"
-                            " or, should we continue to the next page?")
+            self.update_msg("Should I ree-reed the page, or continue to the next page?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, end to end early, default is next page: ")
             if decision == "1":
@@ -407,9 +405,7 @@ class Script:
                 self.next_page()
         elif self.page == 12:
             self.move_head("child")
-            self.update_msg("Okay, if I made a a mistake we can reed this page again, "
-                            "and you can tell me where my mistake was, or, "
-                            "are we done the story?")
+            self.update_msg("Should I ree-reed the page, or are we done?")
             self.free_tts()
             decision = raw_input("Input 1 to re-read the page, enter is end session: ")
             if decision == "1":
@@ -453,5 +449,5 @@ class Script:
             else:
                 break
         self.move_head("book")
-        self.update_msg("Okay, I will continue reading now")
+        self.update_msg("Thank you, I will continue reading now")
         self.free_tts()
